@@ -12,11 +12,6 @@
 
 
 namespace {
-
-
-using namespace std;
-
-
 const auto blockBits = 512;
 
 const auto int32Size = 4;
@@ -104,7 +99,7 @@ void hashRound(RoundVariables& roundVars, const unsigned int& round) {
 
 BlockVector computeHash(HashVector&& previousHash, const BlockVector::const_iterator& blockStart, const BlockVector::const_iterator& blockEnd) {
   BlockVector w;
-  
+
   std::copy(blockStart, blockEnd, std::back_inserter(w));
 
   for (auto i = 16; i < 80; i++) {
@@ -188,11 +183,11 @@ Input GetInput(std::istream& in) {
       next = 0;
     }
   }
-  
+
   if (count > 0) {
     v.emplace_back(next);
   }
-  
+
   return std::make_pair(std::move(v), count);
 }
 
@@ -221,10 +216,10 @@ int main(int argc, char** argv) {
   int exitCode = 0;
 
   for (auto i = 1; i < argc; i++) {
-    ifstream in(argv[i]);
+    std::ifstream in(argv[i]);
 
     if (in.fail()) {
-      cerr << argv[0] << ": " << argv[i] << ": no such file or directory" << std::endl;
+      std::cerr << argv[0] << ": " << argv[i] << ": no such file or directory" << std::endl;
       in.close();
       exitCode = 1;
       continue;
