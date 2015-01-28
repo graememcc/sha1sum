@@ -1,42 +1,40 @@
 #include <vector>
 #include <cinttypes>
 #include <iostream>
-#include <ostream>
-#include <istream>
-#include <ios>
 #include <numeric>
 #include <iomanip>
 #include <functional>
 #include <fstream>
 #include <algorithm>
+#include <limits>
 
 
 namespace {
-const auto blockBits = 512;
+constexpr auto blockBits = 512;
 
-const auto int32Size = 4;
-const auto int32Bits = int32Size * 8;
-const auto intsPerBlock = blockBits / int32Bits;
+constexpr auto int32Size = sizeof(uint32_t);
+constexpr int int32Bits = std::numeric_limits<uint32_t>::digits;
+constexpr auto intsPerBlock = blockBits / int32Bits;
 
-const auto resultBits = 160;
-const auto intsInResult = resultBits / int32Bits;
+constexpr auto resultBits = 160;
+constexpr auto intsInResult = resultBits / int32Bits;
 
-typedef std::vector<uint32_t> BlockVector;
-typedef std::vector<uint32_t> HashVector;
+using BlockVector = std::vector<uint32_t>;
+using HashVector = std::vector<uint32_t>;
 
 
-uint32_t rotl(const uint32_t x, const unsigned int& n) {
+uint32_t rotl(const uint32_t x, const unsigned int n) {
   const unsigned int rshift = int32Bits - n;
   return (x << n) | (x >> rshift);
 }
 
 
-uint32_t accumulateUint(const uint32_t& left, unsigned char& right) {
+uint32_t accumulateUint(const uint32_t left, unsigned char right) {
   return (left << 8) | right;
 }
 
 
-typedef std::function<uint32_t(const uint32_t&, const uint32_t&, const uint32_t&)> RoundFunction;
+typedef std::function<uint32_t(const uint32_t, const uint32_t, const uint32_t)> RoundFunction;
 
 
 RoundFunction& getFunctionForRound(const unsigned int round) {
@@ -78,11 +76,11 @@ struct RoundVariables {
   BlockVector W;
 
   RoundVariables(HashVector& hash, BlockVector&& w) : workingVars(HashVector(hash)), W(w) {}
-  HashVector&& getHash() { return std::move(workingVars); }
+  HashVector getHash() { return workingVars; }
 };
 
 
-void hashRound(RoundVariables& roundVars, const unsigned int& round) {
+void hashRound(RoundVariables& roundVars, const unsigned int round) {
   enum {a, b, c, d, e};
   HashVector& vars = roundVars.workingVars;
 
