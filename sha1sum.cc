@@ -193,7 +193,7 @@ Input GetInput(std::istream& in) {
 void hashSource(std::istream& in, const char* source) {
   HashVector hashed = sha1(PadInput(move(GetInput(in))));
 
-  std::cout << std::hex << std::setfill('0') << std::setw(int32Size);
+  std::cout << std::hex << std::setfill('0') << std::setw(int32Bits / int32Size);
   for (auto i : hashed) {
     std::cout << i;
   }
