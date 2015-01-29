@@ -16,9 +16,6 @@ constexpr auto int32Size = sizeof(uint32_t);
 constexpr int int32Bits = std::numeric_limits<uint32_t>::digits;
 constexpr auto intsPerBlock = blockBits / int32Bits;
 
-constexpr auto resultBits = 160;
-constexpr auto intsInResult = resultBits / int32Bits;
-
 using BlockVector = std::vector<uint32_t>;
 using HashVector = std::vector<uint32_t>;
 
