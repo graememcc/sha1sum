@@ -182,7 +182,7 @@ Input GetInput(std::istream& in) {
     }
   }
 
-  if (count > 0) {
+  if (count > 0 && (count % int32Size) != 0) {
     v.emplace_back(next);
   }
 
