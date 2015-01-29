@@ -31,23 +31,23 @@ uint32_t accumulateUint(const uint32_t left, unsigned char right) {
 }
 
 
-typedef std::function<uint32_t(const uint32_t, const uint32_t, const uint32_t)> RoundFunction;
+using RoundFunction = uint32_t (*)(const uint32_t, const uint32_t, const uint32_t);
 
 
 RoundFunction& getFunctionForRound(const unsigned int round) {
   static RoundFunction roundFunctions[] = {
     // Ch: rounds 0 - 19
-    [] (const uint32_t& x, const uint32_t& y, const uint32_t& z) -> uint32_t {
+    [] (const uint32_t x, const uint32_t y, const uint32_t z) -> uint32_t {
       return (x & y) ^ (~x & z);
     },
 
     // Parity: 20-39, 60 - 79
-    [] (const uint32_t& x, const uint32_t& y, const uint32_t& z) -> uint32_t {
+    [] (const uint32_t x, const uint32_t y, const uint32_t z) -> uint32_t {
       return x ^ y ^ z;
     },
 
     // Maj: 40 - 59
-    [] (const uint32_t& x, const uint32_t& y, const uint32_t& z) -> uint32_t {
+    [] (const uint32_t x, const uint32_t y, const uint32_t z) -> uint32_t {
       return (x & y) ^ (x & z) ^ (y & z);
     }
   };
@@ -56,7 +56,7 @@ RoundFunction& getFunctionForRound(const unsigned int round) {
 }
 
 
-const uint32_t& getConstantForRound(const unsigned int round) {
+const uint32_t getConstantForRound(const unsigned int round) {
   static uint32_t constants[] = {
     0x5a827999, // 0 - 29
     0x6ed9eba1, // 20 - 39
